@@ -6,26 +6,23 @@ class GamePageController < ApplicationController
 	def home
   end
 
-	def put_piece
-		@row = params[:row]
-		@column = params[:column]
-		add_the_new_piece_in_the_game
-		@status_of_the_game.update_attributes({ :array => @tictactoe_game.board})
-		respond_to do |format|
-			format.html{redirect_to(game_page_home_path)}
-		end 
 
+	def put_piece
+	  get_patameters_of_the_view
+		add_the_new_piece_in_the_game
+	  update_the_board_in_the_model
+	  redirect_to_home
 	end
+
 
   def help
   end
 
+
 	def new_game  
      @tictactoe_game.clean_the_board
-		 @status_of_the_game.update_attributes({ :array => @tictactoe_game.board})
-		 respond_to do |format|
-			format.html{redirect_to(game_page_home_path)}
-		end 
+	   update_the_board_in_the_model
+	   redirect_to_home
 	end
 
 private
@@ -50,7 +47,6 @@ private
 
 	
 	def add_the_new_piece_in_the_game
-		convert_the_parameters_to_integers
     if @status_of_the_game.current_player == "Y" and @tictactoe_game.put_piece_at_game(@row, @column,"Y") 
 		  @status_of_the_game.update_attributes({ :current_player => "X"})
 		elsif @status_of_the_game.current_player == "X" and @tictactoe_game.put_piece_at_game(@row, @column,"X") 
@@ -59,8 +55,20 @@ private
 	end
 
 
-	def convert_the_parameters_to_integers
-		@row = @row.to_i
-		@column = @column.to_i 
+	def redirect_to_home
+		respond_to do |format|
+			format.html{redirect_to(game_page_home_path)}
+		end 
+	end
+
+
+	def update_the_board_in_the_model
+		 @status_of_the_game.update_attributes({ :array => @tictactoe_game.board})
+	end
+
+
+	def get_patameters_of_the_view
+		@row = params[:row].to_i
+		@column = params[:column].to_i
 	end
 end
