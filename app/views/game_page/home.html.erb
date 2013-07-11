@@ -1,0 +1,39 @@
+
+<% provide(:title, 'Tic Tac Toe') %>
+
+<div class="center hero-unit">
+  <h2>Tic Tac Toe</h2>
+
+<center>
+<% if @tictactoe_game.is_there_a_winner? %>
+   <h3> The winner is: <%= @tictactoe_game.who_is_the_winner? %> </h3>
+<% elsif @tictactoe_game.is_there_a_tie? %>
+	 <h3> There is a tie </h3>
+<% else %>
+   <h3> Current player: <%= @status_of_the_game.current_player %> </h3>
+<% end %>
+
+<div lign="center" >
+    <table>
+      <% (0 ... 3).each do |row| %>
+      <tr>
+        <% (0 ... 3).each do |column| %>
+        <td>
+          <%= button_to " " + @tictactoe_game.board[row][column] + " ", 
+            { :action => "put_piece", :row => row, :column => column }, 
+              :disabled => (@tictactoe_game.is_there_a_winner? or @tictactoe_game.is_there_a_tie?), 
+							:method => "post", class: "btn btn-large btn-primary"%>
+        </td>
+      <% end %>
+      </tr>
+    <% end  %>
+    </table>
+ </div>
+
+<%= form_tag :action => 'new_game' do %> 
+<%= submit_tag 'clean the board' %> 
+<% end %>
+
+<%= link_to "Help", '/game_page/help' %>
+</center>
+
