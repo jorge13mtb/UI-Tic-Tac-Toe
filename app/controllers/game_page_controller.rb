@@ -23,7 +23,9 @@ class GamePageController < ApplicationController
 	def new_game  
      @tictactoe_game.clean_the_board
 		 @status_of_the_game.update_attributes({ :array => @tictactoe_game.board})
-     render 'home'
+		 respond_to do |format|
+			format.html{redirect_to(game_page_home_path)}
+		end 
 	end
 
 private
